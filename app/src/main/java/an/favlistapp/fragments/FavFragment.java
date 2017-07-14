@@ -93,7 +93,7 @@ public class FavFragment extends Fragment {
         return view;
     }
 
-    private void setFavDataTolist() {
+    public void setFavDataTolist() {
         db = new DatabaseHandler(getContext());
         if (db != null && db.getFavItemCount() > 0) {
             swipeRefreshLayout.setVisibility(View.VISIBLE);
@@ -117,6 +117,12 @@ public class FavFragment extends Fragment {
             swipeRefreshLayout.setRefreshing(false);
         }
 
+    }
+
+    public void refreshList() {
+        if (_listAdapter != null) {
+            _listAdapter.notifyDataSetChanged();
+        }
     }
 
 }

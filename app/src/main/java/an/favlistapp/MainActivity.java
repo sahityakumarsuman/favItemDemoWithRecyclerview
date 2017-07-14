@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity implements NetworkConnection
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
+
+        viewPager.setOffscreenPageLimit(0);
+
     }
 
     private void setupTabIcons() {
@@ -53,11 +56,31 @@ public class MainActivity extends AppCompatActivity implements NetworkConnection
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+    private void setupViewPager(final ViewPager viewPager) {
+        final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new ListFragment(), "List");
         adapter.addFrag(new FavFragment(), "Favourites");
         viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                viewPager.setCurrentItem(position);
+                adapter.refreshFragment(position);
+                adapter.notifyDataSetChanged();
+                viewPager.destroyDrawingCache();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
     }
 
@@ -88,6 +111,8 @@ public class MainActivity extends AppCompatActivity implements NetworkConnection
 
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
+        private ListFragment _listFragment;
+        private FavFragment _favFragment;
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
@@ -97,11 +122,20 @@ public class MainActivity extends AppCompatActivity implements NetworkConnection
 
         @Override
         public Fragment getItem(int position) {
-            return mFragmentList.get(position);
+            switch (position) {
+                case 0:
+                    _listFragment = new ListFragment();
+                    return _listFragment;
+                case 1:
+                    _favFragment = new FavFragment();
+                    return _favFragment;
+            }
+            return null;
         }
 
         @Override
         public int getCount() {
+
             return mFragmentList.size();
         }
 
@@ -110,9 +144,27 @@ public class MainActivity extends AppCompatActivity implements NetworkConnection
             mFragmentTitleList.add(title);
         }
 
+        public void refreshFragment(int position) {
+
+            switch (position) {
+                case 0:
+                    if (_listFragment != null) {
+                        _listFragment.getListDataFromNetwork();
+                    }
+                    break;
+                case 1:
+                    if (_favFragment != null) {
+                        _favFragment.setFavDataTolist();
+                    }
+                    break;
+
+            }
+        }
+
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
     }
+
 }

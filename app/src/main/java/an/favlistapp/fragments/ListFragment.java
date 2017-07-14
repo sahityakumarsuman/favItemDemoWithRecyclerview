@@ -94,7 +94,7 @@ public class ListFragment extends Fragment implements NetworkConnectionReceiver.
         return view;
     }
 
-    private void getListDataFromNetwork() {
+    public void getListDataFromNetwork() {
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
         Utils.showingLoadingView(getContext(), progressDialog, "Please wait...");
 

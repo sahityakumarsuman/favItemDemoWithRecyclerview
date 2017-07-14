@@ -16,6 +16,8 @@ import java.util.List;
 
 import an.favlistapp.R;
 import an.favlistapp.database.DatabaseHandler;
+import an.favlistapp.fragments.FavFragment;
+import an.favlistapp.fragments.ListFragment;
 import an.favlistapp.util.CircleTransform;
 import an.favlistapp.util.UserDataUtils;
 import an.favlistapp.util.SharedPrefsUtils;
@@ -31,6 +33,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
     private SharedPrefsUtils sharedPrefsUtils;
     private boolean _isFav;
     private DatabaseHandler db;
+    private FavFragment _favFrag;
+    private ListFragment _listFragment;
 
     public ListAdapter(Context context, List<UserDataUtils> listData, boolean fromFav) {
         this._mContext = context;
@@ -38,6 +42,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
         sharedPrefsUtils = new SharedPrefsUtils(_mContext);
         this._isFav = fromFav;
         this.db = new DatabaseHandler(_mContext);
+        _favFrag = new FavFragment();
+        _listFragment = new ListFragment();
 
     }
 
@@ -152,6 +158,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
         return _listData.size();
     }
 
+
     @Override
     public long getItemId(int position) {
         return position;
@@ -183,5 +190,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
 
         }
     }
+
+
 
 }
