@@ -1,5 +1,7 @@
 package an.favlistapp;
 
+import android.graphics.Color;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -7,17 +9,27 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import an.favlistapp.app.CustomApplication;
 import an.favlistapp.fragments.FavFragment;
 import an.favlistapp.fragments.ListFragment;
+import an.favlistapp.receiver.NetworkConnectionReceiver;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NetworkConnectionReceiver.NetworkConnectionReceiverListener {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        CustomApplication.getInstance().setConnectivityListener(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +59,31 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFrag(new FavFragment(), "Favourites");
         viewPager.setAdapter(adapter);
 
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        showSnack(isConnected);
+    }
+
+    private void showSnack(boolean isConnected) {
+        String message;
+        int color;
+        if (isConnected) {
+            message = "Good! Connected to Internet";
+            color = Color.WHITE;
+        } else {
+            message = "Sorry! Not connected to internet";
+            color = Color.RED;
+        }
+
+        Snackbar snackbar = Snackbar
+                .make(findViewById(R.id.parentRelativeLayout), message, Snackbar.LENGTH_LONG);
+
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(color);
+        snackbar.show();
     }
 
 

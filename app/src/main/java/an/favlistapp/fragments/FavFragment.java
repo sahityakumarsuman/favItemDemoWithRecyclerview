@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,13 +20,9 @@ import java.util.List;
 import an.favlistapp.R;
 import an.favlistapp.adapter.ListAdapter;
 import an.favlistapp.database.DatabaseHandler;
-import an.favlistapp.util.ListUtils;
-import an.favlistapp.util.SharedPrefsUtils;
+import an.favlistapp.util.DividerItemDecoration;
+import an.favlistapp.util.UserDataUtils;
 import an.favlistapp.util.Utils;
-
-/**
- * Created by sahitya on 13/7/17.
- */
 
 public class FavFragment extends Fragment {
 
@@ -33,7 +30,7 @@ public class FavFragment extends Fragment {
     private RecyclerView _recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListAdapter _listAdapter;
-    private List<ListUtils> _favListData;
+    private List<UserDataUtils> _favListData;
     private LinearLayout _nofavdataLinearLayout;
     private ImageView _favIcon;
     private DatabaseHandler db;
@@ -47,7 +44,7 @@ public class FavFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d("onResume", " onResume method called");
-        if (db != null && db.getContactsCount() > 0) {
+        if (db != null && db.getFavItemCount() > 0) {
             swipeRefreshLayout.setRefreshing(true);
             setFavDataTolist();
         }
@@ -97,17 +94,17 @@ public class FavFragment extends Fragment {
     }
 
     private void setFavDataTolist() {
-
-        // SharedPrefsUtils sharedPrefsUtils = new SharedPrefsUtils(getContext());
         db = new DatabaseHandler(getContext());
-        if (db != null && db.getContactsCount() > 0) {
+        if (db != null && db.getFavItemCount() > 0) {
             swipeRefreshLayout.setVisibility(View.VISIBLE);
             _nofavdataLinearLayout.setVisibility(View.GONE);
-            _favListData = db.getAllContacts();
+            _favListData = db.getAllFavItem();
             _listAdapter = new ListAdapter(getContext(), _favListData, true);
             LinearLayoutManager llm = new LinearLayoutManager(getContext());
             llm.setOrientation(LinearLayoutManager.VERTICAL);
             _recyclerView.setLayoutManager(llm);
+            _recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+            _recyclerView.setItemAnimator(new DefaultItemAnimator());
             _recyclerView.setAdapter(_listAdapter);
             swipeRefreshLayout.setRefreshing(false);
 

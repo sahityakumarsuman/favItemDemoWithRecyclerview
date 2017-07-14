@@ -11,7 +11,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -47,14 +46,7 @@ final public class SharedPrefsUtils {
         return false;
     }
 
-    /**
-     * Helper method to retrieve a float value from {@link SharedPreferences}.
-     *
-     * @param context      a {@link Context} object.
-     * @param key
-     * @param defaultValue A default to return if the value could not be read.
-     * @return The value from shared preferences, or the provided default.
-     */
+
     public static float getFloatPreference(Context context, String key, float defaultValue) {
         float value = defaultValue;
         SharedPreferences preferences = context.getSharedPreferences("paytmCash", Context.MODE_PRIVATE);
@@ -64,14 +56,7 @@ final public class SharedPrefsUtils {
         return value;
     }
 
-    /**
-     * Helper method to write a float value to {@link SharedPreferences}.
-     *
-     * @param context a {@link Context} object.
-     * @param key
-     * @param value
-     * @return true if the new value was successfully written to persistent storage.
-     */
+
     public static boolean setFloatPreference(Context context, String key, float value) {
         SharedPreferences preferences = context.getSharedPreferences("paytmCash", Context.MODE_PRIVATE);
         if (preferences != null) {
@@ -82,14 +67,7 @@ final public class SharedPrefsUtils {
         return false;
     }
 
-    /**
-     * Helper method to retrieve a long value from {@link SharedPreferences}.
-     *
-     * @param context      a {@link Context} object.
-     * @param key
-     * @param defaultValue A default to return if the value could not be read.
-     * @return The value from shared preferences, or the provided default.
-     */
+
     public static long getLongPreference(Context context, String key, long defaultValue) {
         long value = defaultValue;
         SharedPreferences preferences = context.getSharedPreferences("paytmCash", Context.MODE_PRIVATE);
@@ -99,14 +77,7 @@ final public class SharedPrefsUtils {
         return value;
     }
 
-    /**
-     * Helper method to write a long value to {@link SharedPreferences}.
-     *
-     * @param context a {@link Context} object.
-     * @param key
-     * @param value
-     * @return true if the new value was successfully written to persistent storage.
-     */
+
     public static boolean setLongPreference(Context context, String key, long value) {
         SharedPreferences preferences = context.getSharedPreferences("paytmCash", Context.MODE_PRIVATE);
         if (preferences != null) {
@@ -117,14 +88,7 @@ final public class SharedPrefsUtils {
         return false;
     }
 
-    /**
-     * Helper method to retrieve an integer value from {@link SharedPreferences}.
-     *
-     * @param context      a {@link Context} object.
-     * @param key
-     * @param defaultValue A default to return if the value could not be read.
-     * @return The value from shared preferences, or the provided default.
-     */
+
     public static int getIntegerPreference(Context context, String key, int defaultValue) {
         int value = defaultValue;
         SharedPreferences preferences = context.getSharedPreferences("paytmCash", Context.MODE_PRIVATE);
@@ -134,14 +98,7 @@ final public class SharedPrefsUtils {
         return value;
     }
 
-    /**
-     * Helper method to write an integer value to {@link SharedPreferences}.
-     *
-     * @param context a {@link Context} object.
-     * @param key
-     * @param value
-     * @return true if the new value was successfully written to persistent storage.
-     */
+
     public static boolean setIntegerPreference(Context context, String key, int value) {
         SharedPreferences preferences = context.getSharedPreferences("paytmCash", Context.MODE_PRIVATE);
         if (preferences != null) {
@@ -152,14 +109,7 @@ final public class SharedPrefsUtils {
         return false;
     }
 
-    /**
-     * Helper method to retrieve a boolean value from {@link SharedPreferences}.
-     *
-     * @param context      a {@link Context} object.
-     * @param key
-     * @param defaultValue A default to return if the value could not be read.
-     * @return The value from shared preferences, or the provided default.
-     */
+
     public static boolean getBooleanPreference(Context context, String key, boolean defaultValue) {
         boolean value = defaultValue;
         SharedPreferences preferences = context.getSharedPreferences("paytmCash", Context.MODE_PRIVATE);
@@ -169,14 +119,7 @@ final public class SharedPrefsUtils {
         return value;
     }
 
-    /**
-     * Helper method to write a boolean value to {@link SharedPreferences}.
-     *
-     * @param context a {@link Context} object.
-     * @param key
-     * @param value
-     * @return true if the new value was successfully written to persistent storage.
-     */
+
     public static boolean setBooleanPreference(Context context, String key, boolean value) {
         SharedPreferences preferences = context.getSharedPreferences("paytmCash", Context.MODE_PRIVATE);
         if (preferences != null) {
@@ -187,13 +130,13 @@ final public class SharedPrefsUtils {
         return false;
     }
 
-    public void saveDataToList(Context context, ListUtils users) {
+    public void saveDataToList(Context context, UserDataUtils users) {
         SharedPreferences settings = context.getSharedPreferences("paytmCash", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor;
         editor = settings.edit();
 
 
-        List<ListUtils> details = null;
+        List<UserDataUtils> details = null;
         int leght;
         if (getUsers(context) != null) {
             leght = getUsers(context).size();
@@ -223,20 +166,20 @@ final public class SharedPrefsUtils {
     }
 
 
-    public ArrayList<ListUtils> getUsers(Context context) {
+    public ArrayList<UserDataUtils> getUsers(Context context) {
         SharedPreferences settings;
-        ArrayList<ListUtils> users;
+        ArrayList<UserDataUtils> users;
         settings = context.getSharedPreferences("paytmCash", Context.MODE_PRIVATE);
         if (settings.contains("user")) {
             String jsonUsers = settings.getString("user", null);
             GsonBuilder gsonBuilder = new GsonBuilder();
             Gson gson = gsonBuilder.create();
-            Type type = new TypeToken<ArrayList<ListUtils>>() {
+            Type type = new TypeToken<ArrayList<UserDataUtils>>() {
             }.getType();
-            ArrayList<ListUtils> userItems = gson.fromJson(jsonUsers, type);
-            users = new ArrayList<ListUtils>(userItems);
+            ArrayList<UserDataUtils> userItems = gson.fromJson(jsonUsers, type);
+            users = new ArrayList<UserDataUtils>(userItems);
         } else
             return null;
-        return (ArrayList<ListUtils>) users;
+        return (ArrayList<UserDataUtils>) users;
     }
 }

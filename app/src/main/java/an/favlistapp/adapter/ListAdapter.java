@@ -17,25 +17,22 @@ import java.util.List;
 import an.favlistapp.R;
 import an.favlistapp.database.DatabaseHandler;
 import an.favlistapp.util.CircleTransform;
-import an.favlistapp.util.ListUtils;
+import an.favlistapp.util.UserDataUtils;
 import an.favlistapp.util.SharedPrefsUtils;
 import an.favlistapp.util.Utils;
 import an.favlistapp.util.custom_ui.CustomFavoriteButton;
 
-/**
- * Created by sahitya on 13/7/17.
- */
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder> {
 
     private Context _mContext;
-    private List<ListUtils> _listData;
-    private List<ListUtils> _favData;
+    private List<UserDataUtils> _listData;
+    private List<UserDataUtils> _favData;
     private SharedPrefsUtils sharedPrefsUtils;
     private boolean _isFav;
     private DatabaseHandler db;
 
-    public ListAdapter(Context context, List<ListUtils> listData, boolean fromFav) {
+    public ListAdapter(Context context, List<UserDataUtils> listData, boolean fromFav) {
         this._mContext = context;
         this._listData = listData;
         sharedPrefsUtils = new SharedPrefsUtils(_mContext);
@@ -56,7 +53,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
     public void onBindViewHolder(final ListViewHolder holder, int position) {
 
 
-        final ListUtils listUtilsData = _listData.get(position);
+        final UserDataUtils listUtilsData = _listData.get(position);
         holder._titleTV.setText(listUtilsData.get_title());
         holder._descriptionTV.setText(listUtilsData.get_description());
         holder._counterView_TV.setText(Utils.format(Double.parseDouble(listUtilsData.get_viewCount())));
@@ -82,6 +79,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
         } else {
             holder._favoriteButton.setVisibility(View.VISIBLE);
         }
+        holder._favoriteButton.setType(CustomFavoriteButton.STYLE_HEART);
 
         holder._favoriteButton.setOnFavoriteChangeListener(new CustomFavoriteButton.OnFavoriteChangeListener() {
             @Override
@@ -99,7 +97,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
 
                     Log.d("Liked Data", "Title " + title + ", Des " + description + ", CounterView" + counterView + ", offer " + offerTv + ", ImageUrl " + imageUrm);
 
-                    ListUtils newData = new ListUtils();
+                    UserDataUtils newData = new UserDataUtils();
                     newData.set_viewCount(counterView);
                     newData.set_title(title);
                     newData.set_type(offerTv);
@@ -111,7 +109,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
                         boolean existOrNot = db.ifExists(newData);
                         if (!existOrNot) {
                             db.addFav(newData);
-                            Log.d("Left Total ", " ::: " + db.getContactsCount());
+                            Log.d("Left Total ", " ::: " + db.getFavItemCount());
                         }
                     }
 
@@ -125,7 +123,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
                     String offerTv = listUtilsData.get_type();
                     String imageUrm = listUtilsData.get_imageUrl();
                     boolean liked = false;
-                    ListUtils listutil = new ListUtils();
+                    UserDataUtils listutil = new UserDataUtils();
                     listutil.set_title(title);
                     listutil.set_fav(liked);
                     listutil.set_description(description);
@@ -135,8 +133,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
                     if (db != null) {
                         boolean exist = db.ifExists(listutil);
                         if (exist) {
-                            db.deleteContact(listutil);
-                            Log.d("Left Total ", " ::: " + db.getContactsCount());
+                            db.deleteFavItem(listutil);
+                            Log.d("Left Total ", " ::: " + db.getFavItemCount());
                         }
                     }
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,19 +24,17 @@ import an.favlistapp.adapter.ListAdapter;
 import an.favlistapp.network.FailureCallback;
 import an.favlistapp.network.StatusCodeCallback;
 import an.favlistapp.network.SuccessCallback;
-import an.favlistapp.util.ListUtils;
+import an.favlistapp.util.DividerItemDecoration;
+import an.favlistapp.util.UserDataUtils;
 import an.favlistapp.util.Utils;
 
-/**
- * Created by sahitya on 13/7/17.
- */
 
 public class ListFragment extends Fragment {
 
     private RecyclerView _mainRecyclerViewData;
     private SwipeRefreshLayout _swipeRefreshLayout;
     private ListAdapter _recyclerViewAdapter;
-    private List<ListUtils> _listData = new ArrayList<>();
+    private List<UserDataUtils> _listData = new ArrayList<>();
     private NetworkResponse networkResponse;
     private LinearLayout _nofavDatacontain;
     private ImageView noDataImageView;
@@ -100,12 +99,15 @@ public class ListFragment extends Fragment {
                 if (networkResponse != null && networkResponse.statusCode == 200) {
                     _nofavDatacontain.setVisibility(View.GONE);
                     _swipeRefreshLayout.setVisibility(View.VISIBLE);
-                    List<ListUtils> listUtilses = new ArrayList<ListUtils>();
+                    List<UserDataUtils> listUtilses = new ArrayList<UserDataUtils>();
                     listUtilses = Utils.parseResponseForList(response);
                     _recyclerViewAdapter = new ListAdapter(getContext(), listUtilses, false);
                     LinearLayoutManager llm = new LinearLayoutManager(getContext());
                     llm.setOrientation(LinearLayoutManager.VERTICAL);
                     _mainRecyclerViewData.setLayoutManager(llm);
+                    _mainRecyclerViewData.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+                    _mainRecyclerViewData.setItemAnimator(new DefaultItemAnimator());
+
                     _mainRecyclerViewData.setAdapter(_recyclerViewAdapter);
                     Utils.dismissLoadingView(getContext(), progressDialog);
                     _swipeRefreshLayout.setRefreshing(false);

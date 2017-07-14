@@ -75,66 +75,27 @@ public class CustomFavoriteButton extends ImageView {
         init(context, attrs);
     }
 
-    /**
-     * Interface definition for a callback to be invoked when the favorite state is changed.
-     */
+
     public interface OnFavoriteChangeListener {
-        /**
-         * Called when the favorite state is changed.
-         *
-         * @param buttonView the button view whose state has changed
-         * @param favorite   the favorite state
-         */
+
         void onFavoriteChanged(CustomFavoriteButton buttonView, boolean favorite);
     }
 
-    /**
-     * Set a listener will be called when the favorite state is changed.
-     *
-     * @param listener the {@link CustomFavoriteButton.OnFavoriteChangeListener} will be called
-     */
     public void setOnFavoriteChangeListener(OnFavoriteChangeListener listener) {
         mOnFavoriteChangeListener = listener;
     }
 
-    /**
-     * Interface definition for a callback to be invoked when the favorite animation ends.
-     */
+
     public interface OnFavoriteAnimationEndListener {
-        /**
-         * Called when the favorite animation ended.
-         *
-         * @param buttonView the button view whose animation ended
-         * @param favorite   the favorite state
-         */
+
         void onAnimationEnd(CustomFavoriteButton buttonView, boolean favorite);
     }
 
-    /**
-     * Set a listener will be called when the favorite state is changed.
-     *
-     * @param listener the {@link CustomFavoriteButton.OnFavoriteAnimationEndListener} will be
-     *                 called
-     */
+
     public void setOnFavoriteAnimationEndListener(OnFavoriteAnimationEndListener listener) {
         mOnFavoriteAnimationEndListener = listener;
     }
 
-    /**
-     * Initialize the default values
-     * <ul>
-     * <li>size = 48 dp</li>
-     * <li>padding = 12 dp</li>
-     * <li>is mFavorite = false</li>
-     * <li>animated = true</li>
-     * <li>default drawables - stars</li>
-     * <li>rotation duration = 300 ms</li>
-     * <li>rotation angle = 360 degrees</li>
-     * <li>bounce duration = 300 ms</li>
-     * <li>color of default icon = black</li>
-     * <li>type of default icon = star</li>
-     * </ul>
-     */
     private void init(Context context, AttributeSet attrs) {
         mButtonSize = Utils.dpToPx(DEFAULT_BUTTON_SIZE, getResources());
         mPadding = Utils.dpToPx(DEFAULT_PADDING, getResources());
@@ -245,24 +206,15 @@ public class CustomFavoriteButton extends ImageView {
         setMeasuredDimension(mButtonSize, mButtonSize);
     }
 
-    /**
-     * Returns favorite state.
-     *
-     * @return true if button is in favorite state, false if not
-     */
+
     public boolean isFavorite() {
         return mFavorite;
     }
 
-    /**
-     * Changes the favorite state of this button.
-     *
-     * @param favorite true to favorite the button, false to uncheck it
-     */
+
     public void setFavorite(boolean favorite) {
         if (mFavorite != favorite) {
             mFavorite = favorite;
-            // Avoid infinite recursions if setChecked() is called from a listener
             if (mBroadcasting) {
                 return;
             }
@@ -276,12 +228,7 @@ public class CustomFavoriteButton extends ImageView {
         }
     }
 
-    /**
-     * Changes the favorite state of this button.
-     *
-     * @param favorite true to favorite the button, false to uncheck it
-     * @param animated true to force animated change, false to force not animated one
-     */
+
     public void setFavorite(boolean favorite, boolean animated) {
         if (favorite) {
             boolean orig = mAnimateFavorite;
@@ -296,18 +243,12 @@ public class CustomFavoriteButton extends ImageView {
         }
     }
 
-    /**
-     * Toggle the favorite state of this button.
-     */
+
     public void toggleFavorite() {
         setFavorite(!mFavorite);
     }
 
-    /**
-     * Toggle the favorite state of this button.
-     *
-     * @param animated true to force animated toggle, false to force not animated one
-     */
+
     public void toggleFavorite(boolean animated) {
         if (!mFavorite) {
             boolean orig = mAnimateFavorite;
@@ -397,9 +338,7 @@ public class CustomFavoriteButton extends ImageView {
         animatorSet.start();
     }
 
-    /**
-     * Builder.
-     */
+
     public static final class Builder {
         private final Context context;
 

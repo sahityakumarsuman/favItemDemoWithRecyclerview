@@ -4,9 +4,9 @@ package an.favlistapp.util;
  * Created by sahitya on 13/7/17.
  */
 
-public class ListUtils {
+public class UserDataUtils {
 
-    public ListUtils() {
+    public UserDataUtils() {
 
     }
 

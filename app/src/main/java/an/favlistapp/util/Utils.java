@@ -5,9 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.design.widget.Snackbar;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,15 +95,15 @@ public class Utils {
 
     }
 
-    public static List<ListUtils> parseResponseForList(String response) {
+    public static List<UserDataUtils> parseResponseForList(String response) {
 
-        List<ListUtils> listDatParse = new ArrayList<>();
+        List<UserDataUtils> listDatParse = new ArrayList<>();
         try {
             JSONArray mainJsonArray = new JSONArray(response);
             for (int i = 0; i < mainJsonArray.length(); i++) {
 
                 JSONObject singleJsonData = mainJsonArray.getJSONObject(i);
-                ListUtils singleData = new ListUtils();
+                UserDataUtils singleData = new UserDataUtils();
                 singleData.set_title(singleJsonData.has("title") ? singleJsonData.getString("title") : "");
                 singleData.set_description(singleJsonData.has("desc") ? singleJsonData.getString("desc") : "");
                 singleData.set_imageUrl(singleJsonData.has("imageUrl") ? singleJsonData.getString("imageUrl") : "");

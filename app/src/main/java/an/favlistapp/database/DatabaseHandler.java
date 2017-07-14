@@ -9,11 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-import an.favlistapp.util.ListUtils;
+import an.favlistapp.util.UserDataUtils;
 
-/**
- * Created by sahitya on 14/7/17.
- */
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -22,10 +19,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Database Name
     private static final String DATABASE_NAME = "favourite";
 
-    // Contacts table name
+    // FavItem table name
     private static final String TABLE_FAV = "favlist";
 
-    // Contacts Table Columns names
+    // FavItem Table Columns names
     private static final String KEY_ID = "id";
     private static final String KEY_TITLE = "title";
     private static final String KEY_DESCRIPTION = "desc";
@@ -40,10 +37,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_FAV + "("
+        String CREATE_FAVITEM_TABLE = "CREATE TABLE " + TABLE_FAV + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT,"
                 + KEY_DESCRIPTION + " TEXT," + KEY_IMAGE_URL + " TEXT," + KEY_TYPE + " TEXT," + KEY_VIEW_COUNT + " TEXT" + ")";
-        db.execSQL(CREATE_CONTACTS_TABLE);
+        db.execSQL(CREATE_FAVITEM_TABLE);
     }
 
     @Override
@@ -56,7 +53,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
 
-    public void addFav(ListUtils fav) {
+    public void addFav(UserDataUtils fav) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -71,7 +68,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
-    public ListUtils getContact(String title_query) {
+    public UserDataUtils getFavItemSingel(String title_query) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_FAV, new String[]{KEY_ID,
@@ -80,19 +77,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor != null)
             cursor.moveToFirst();
 
-        ListUtils favItem = new ListUtils();
+        UserDataUtils favItem = new UserDataUtils();
         favItem.set_title(cursor.getString(1));
         favItem.set_description(cursor.getString(2));
         favItem.set_imageUrl(cursor.getString(3));
         favItem.set_type(cursor.getString(4));
         favItem.set_viewCount(cursor.getString(5));
         favItem.set_fav(true);
-        // return contact
         return favItem;
     }
 
-    public List<ListUtils> getAllContacts() {
-        List<ListUtils> favList = new ArrayList<ListUtils>();
+    public List<UserDataUtils> getAllFavItem() {
+        List<UserDataUtils> favList = new ArrayList<UserDataUtils>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_FAV;
 
@@ -102,7 +98,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                ListUtils listUtils = new ListUtils();
+                UserDataUtils listUtils = new UserDataUtils();
                 listUtils.set_title(cursor.getString(1));
                 listUtils.set_description(cursor.getString(2));
                 listUtils.set_imageUrl(cursor.getString(3));
@@ -116,7 +112,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
 
-    public int getContactsCount() {
+    public int getFavItemCount() {
         int count = 0;
         String countQuery = "SELECT  * FROM " + TABLE_FAV;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -126,14 +122,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return count;
     }
 
-    public void deleteContact(ListUtils favItem) {
+    public void deleteFavItem(UserDataUtils favItem) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_FAV, KEY_TITLE + " = ?",
                 new String[]{favItem.get_title()});
         db.close();
     }
 
-    public boolean ifExists(ListUtils favItem) {
+    public boolean ifExists(UserDataUtils favItem) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
         String checkQuery = "SELECT " + KEY_TITLE + " FROM " + TABLE_FAV + " WHERE " + KEY_TITLE + "= '" + favItem.get_title() + "'";
