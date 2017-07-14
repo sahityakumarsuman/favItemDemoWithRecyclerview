@@ -40,20 +40,9 @@ public class MainActivity extends AppCompatActivity implements NetworkConnection
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        setupTabIcons();
 
         viewPager.setOffscreenPageLimit(0);
 
-    }
-
-    private void setupTabIcons() {
-        int[] tabIcons = {
-                R.drawable.ic_tab_contacts,
-                R.drawable.ic_tab_favourite
-        };
-
-        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
-        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
     }
 
     private void setupViewPager(final ViewPager viewPager) {

@@ -95,6 +95,7 @@ public class ListFragment extends Fragment implements NetworkConnectionReceiver.
     }
 
     public void getListDataFromNetwork() {
+
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
         Utils.showingLoadingView(getContext(), progressDialog, "Please wait...");
 
@@ -187,4 +188,6 @@ public class ListFragment extends Fragment implements NetworkConnectionReceiver.
         textView.setTextColor(color);
         snackbar.show();
     }
+
+
 }

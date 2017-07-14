@@ -16,11 +16,8 @@ import java.util.List;
 
 import an.favlistapp.R;
 import an.favlistapp.database.DatabaseHandler;
-import an.favlistapp.fragments.FavFragment;
-import an.favlistapp.fragments.ListFragment;
 import an.favlistapp.util.CircleTransform;
 import an.favlistapp.util.UserDataUtils;
-import an.favlistapp.util.SharedPrefsUtils;
 import an.favlistapp.util.Utils;
 import an.favlistapp.util.custom_ui.CustomFavoriteButton;
 
@@ -30,20 +27,16 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
     private Context _mContext;
     private List<UserDataUtils> _listData;
     private List<UserDataUtils> _favData;
-    private SharedPrefsUtils sharedPrefsUtils;
+
     private boolean _isFav;
     private DatabaseHandler db;
-    private FavFragment _favFrag;
-    private ListFragment _listFragment;
+
 
     public ListAdapter(Context context, List<UserDataUtils> listData, boolean fromFav) {
         this._mContext = context;
         this._listData = listData;
-        sharedPrefsUtils = new SharedPrefsUtils(_mContext);
         this._isFav = fromFav;
         this.db = new DatabaseHandler(_mContext);
-        _favFrag = new FavFragment();
-        _listFragment = new ListFragment();
 
     }
 
@@ -68,7 +61,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
                 .thumbnail(0.5f)
                 .crossFade()
                 .transform(new CircleTransform(_mContext))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.bg_circle)
                 .into(holder._listImageView);
 
         if (db != null) {
@@ -103,6 +96,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
 
                     Log.d("Liked Data", "Title " + title + ", Des " + description + ", CounterView" + counterView + ", offer " + offerTv + ", ImageUrl " + imageUrm);
 
+                    // putting data to DB
                     UserDataUtils newData = new UserDataUtils();
                     newData.set_viewCount(counterView);
                     newData.set_title(title);
@@ -129,6 +123,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
                     String offerTv = listUtilsData.get_type();
                     String imageUrm = listUtilsData.get_imageUrl();
                     boolean liked = false;
+                    // removing data from DB
                     UserDataUtils listutil = new UserDataUtils();
                     listutil.set_title(title);
                     listutil.set_fav(liked);
@@ -190,7 +185,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
 
         }
     }
-
 
 
 }
