@@ -180,7 +180,7 @@ public class ListFragment extends Fragment implements NetworkConnectionReceiver.
         }
 
         Snackbar snackbar = Snackbar
-                .make(view.findViewById(R.id.parentLinearLayout), message, Snackbar.LENGTH_LONG);
+                .make(view, message, Snackbar.LENGTH_LONG);
 
         View sbView = snackbar.getView();
         TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
