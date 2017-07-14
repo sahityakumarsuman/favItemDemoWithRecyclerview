@@ -1,0 +1,1 @@
+# This project is demo purpose how to save fav. item from recyclerview in your app with using sqlite, this action can also be perfomed using Shareprefrences and saving data in form of JSON format using Gson(Google JSON parsing library). 
