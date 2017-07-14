@@ -36,10 +36,9 @@ import an.favlistapp.util.Utils;
 
 public class ListFragment extends Fragment implements NetworkConnectionReceiver.NetworkConnectionReceiverListener {
 
-    private RecyclerView _mainRecyclerViewData;
+    private RecyclerView recyclerView;
     private SwipeRefreshLayout _swipeRefreshLayout;
     private ListAdapter _recyclerViewAdapter;
-    private List<UserDataUtils> _listData = new ArrayList<>();
     private NetworkResponse networkResponse;
     private LinearLayout _nofavDatacontain;
     private ImageView noDataImageView;
@@ -68,7 +67,7 @@ public class ListFragment extends Fragment implements NetworkConnectionReceiver.
         View view = inflater.inflate(R.layout.recyclerview_layout, container, false);
         this._view = view;
 
-        _mainRecyclerViewData = (RecyclerView) view.findViewById(R.id.mainRecyclerView);
+        recyclerView = (RecyclerView) view.findViewById(R.id.mainRecyclerView);
         _swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         _nofavDatacontain = (LinearLayout) view.findViewById(R.id.nofavListDataLinearLayout);
         noDataImageView = (ImageView) view.findViewById(R.id.nothingImageView);
@@ -113,11 +112,11 @@ public class ListFragment extends Fragment implements NetworkConnectionReceiver.
                     _recyclerViewAdapter = new ListAdapter(getContext(), listUtilses, false);
                     LinearLayoutManager llm = new LinearLayoutManager(getContext());
                     llm.setOrientation(LinearLayoutManager.VERTICAL);
-                    _mainRecyclerViewData.setLayoutManager(llm);
-                    _mainRecyclerViewData.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
-                    _mainRecyclerViewData.setItemAnimator(new DefaultItemAnimator());
+                    recyclerView.setLayoutManager(llm);
+                    recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+                    recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-                    _mainRecyclerViewData.setAdapter(_recyclerViewAdapter);
+                    recyclerView.setAdapter(_recyclerViewAdapter);
                     Utils.dismissLoadingView(getContext(), progressDialog);
                     _swipeRefreshLayout.setRefreshing(false);
 
