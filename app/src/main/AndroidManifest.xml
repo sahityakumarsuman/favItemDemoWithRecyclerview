@@ -21,6 +21,14 @@
             </intent-filter>
         </activity>
 
+        <receiver
+            android:name=".receiver.NetworkConnectionReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

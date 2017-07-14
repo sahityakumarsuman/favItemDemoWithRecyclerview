@@ -1,8 +1,10 @@
 package an.favlistapp.fragments;
 
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.android.volley.NetworkResponse;
 
@@ -21,15 +24,17 @@ import java.util.List;
 
 import an.favlistapp.R;
 import an.favlistapp.adapter.ListAdapter;
+import an.favlistapp.app.CustomApplication;
 import an.favlistapp.network.FailureCallback;
 import an.favlistapp.network.StatusCodeCallback;
 import an.favlistapp.network.SuccessCallback;
+import an.favlistapp.receiver.NetworkConnectionReceiver;
 import an.favlistapp.util.DividerItemDecoration;
 import an.favlistapp.util.UserDataUtils;
 import an.favlistapp.util.Utils;
 
 
-public class ListFragment extends Fragment {
+public class ListFragment extends Fragment implements NetworkConnectionReceiver.NetworkConnectionReceiverListener {
 
     private RecyclerView _mainRecyclerViewData;
     private SwipeRefreshLayout _swipeRefreshLayout;
@@ -38,10 +43,12 @@ public class ListFragment extends Fragment {
     private NetworkResponse networkResponse;
     private LinearLayout _nofavDatacontain;
     private ImageView noDataImageView;
+    private View _view;
 
     @Override
     public void onResume() {
         super.onResume();
+        CustomApplication.getInstance().setConnectivityListener(this);
 
 
     }
@@ -59,6 +66,7 @@ public class ListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.recyclerview_layout, container, false);
+        this._view = view;
 
         _mainRecyclerViewData = (RecyclerView) view.findViewById(R.id.mainRecyclerView);
         _swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
@@ -151,4 +159,32 @@ public class ListFragment extends Fragment {
         return networkResponse;
     }
 
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+
+        if (_view != null) {
+            showSnack(isConnected, _view);
+        }
+
+    }
+
+    private void showSnack(boolean isConnected, View view) {
+        String message;
+        int color;
+        if (isConnected) {
+            message = "Good!! Connected to Internet";
+            color = Color.WHITE;
+        } else {
+            message = "Sorry!! Not connected to internet";
+            color = Color.RED;
+        }
+
+        Snackbar snackbar = Snackbar
+                .make(view.findViewById(R.id.parentLinearLayout), message, Snackbar.LENGTH_LONG);
+
+        View sbView = snackbar.getView();
+        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(color);
+        snackbar.show();
+    }
 }
